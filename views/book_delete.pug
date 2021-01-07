@@ -1,0 +1,34 @@
+extends layout
+
+block content
+    h1 #{title} : #{book.title}
+
+    if book_instances.length
+        p #[strong Delete all book instance associated with this book]
+        
+        h4 Book Instances
+        
+        dl
+        each book_instance in book_instances
+            dt
+                a(href=book_instance.url) #{book_instance._id}
+            dd  Status :
+                if book_instance.status == 'Available'
+                    p.text-success #{book_instance.status}
+                else if book_instance.status == 'Maintenance'
+                    p.text-danger #{book_instance.status}
+                else
+                    p.text-warning #{book_instance.status}
+                p #[strong Imprint :] #{book_instance.imprint}
+
+                if book_instance.status != 'Available'
+                    p #[strong Due Back : ] #{book_instance.due_back}
+             
+    else
+        p #[strong Delete this book ?]
+
+        form(method='POST' action="")
+            div.form-group
+                input#bookid.form-control(type="hidden", name="bookid", required='true', value=book.id)
+            
+            button.btn.btn-primary(type="submit") Delete
